@@ -1,0 +1,16 @@
+<!--登录页-->
+<div id="login">
+    <form id="login-form">
+        <img src="./img/icon_manager.png"/>
+        <h1>Administrator</h1>
+        <div id="username">
+            <i class="icon-user"></i>
+            <input type="text" title="登录" ng-model="username" ng-keydown="loginKeyDown($event)"/>
+        </div>
+        <div id="password">
+            <i class="icon-lock"></i>
+            <input type="password" title="登录" ng-model="password" ng-keydown="loginKeyDown($event)"/>
+        </div>
+        <button ng-click="logBtnClick()">登&nbsp;&nbsp;录</button>
+    </form>
+</div>

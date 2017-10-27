@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dingyan.xgjzx.dao.ConsultDao" >
+  <resultMap id="Consult" type="com.dingyan.xgjzx.pojo.Consult" >
+    <id column="ct_id" property="id" jdbcType="INTEGER" />
+    <result column="ct_title" property="title" jdbcType="VARCHAR" />
+    <result column="ct_type" property="type" jdbcType="VARCHAR" />
+    <result column="ct_content" property="content" jdbcType="VARCHAR" />
+    <result column="ct_author" property="author" jdbcType="VARCHAR" />
+    <result column="ct_img1" property="img1" jdbcType="VARCHAR" />
+    <result column="ct_img2" property="img2" jdbcType="VARCHAR" />
+    <result column="ct_logo" property="logo" jdbcType="VARCHAR" />
+    <result column="ct_date" property="date" jdbcType="DATE" />
+    <result column="ct_origin" property="origin" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="findAll" resultMap="Consult">
+  select * from t_consult
+  </select>
+  <!-- countsearch -->
+  <select id="countsearch" parameterType="java.lang.String" resultType="java.lang.Integer">
+  select count(*) from t_consult where ct_type=#{type,jdbcType=VARCHAR}
+  </select>
+  <!-- search -->
+  <select id="search" parameterType="java.util.Map" resultMap="Consult">
+  select * from t_consult where 1=1
+  <if test="type!=null and type!=''">
+   and ct_type=#{type,jdbcType=VARCHAR} 
+  </if>
+  limit #{page.start,jdbcType=INTEGER},#{page.size,jdbcType=INTEGER}
+  </select>
+  <!-- 根据id查询 -->
+  <select id="findById" parameterType="java.lang.Integer" resultMap="Consult">
+  select * from t_consult where ct_id=#{id,jdbcType=INTEGER}
+  </select>
+  <!-- 查询所有条数 -->
+  <select id="count" resultType="java.lang.Integer">
+  select count(*) from t_consult
+  </select>
+  <!-- 分页查询所有 -->
+  <select id="selectAll" parameterType="java.lang.Integer" resultMap="Consult">
+ select * from t_consult order by ct_id desc limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+  <sql id="Base_Column_List" >
+    ct_id,ct_title, ct_content, ct_author, ct_img1, ct_img2, ct_logo,ct_date,ct_origin
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="Consult" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_consult
+    where ct_id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_consult
+    where ct_id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.dingyan.xgjzx.pojo.Consult" >
+    insert into t_consult (ct_id,ct_type,ct_title, ct_content, ct_author, 
+      ct_img1, ct_img2, ct_logo,ct_date,ct_origin
+      )
+    values (#{id,jdbcType=INTEGER},#{type,jdbcType=VARCHAR},#{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{author,jdbcType=VARCHAR}, 
+      #{img1,jdbcType=VARCHAR}, #{img2,jdbcType=VARCHAR}, #{logo,jdbcType=VARCHAR},#{date,jdbcType=DATE},#{origin,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.dingyan.xgjzx.pojo.Consult" >
+    insert into t_consult
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ct_id,
+      </if>
+      <if test="type != null" >
+        ct_type,
+      </if>
+       <if test="title != null" >
+        ct_title,
+      </if>
+      <if test="content != null" >
+        ct_content,
+      </if>
+      <if test="author != null" >
+        ct_author,
+      </if>
+      <if test="img1 != null" >
+        ct_img1,
+      </if>
+      <if test="img2 != null" >
+        ct_img2,
+      </if>
+      <if test="logo != null" >
+        ct_logo,
+      </if>
+      <if test="date != null" >
+        ct_date,
+      </if>
+      <if test="origin != null" >
+        ct_origin,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="type!= null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="author != null" >
+        #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="img1 != null" >
+        #{img1,jdbcType=VARCHAR},
+      </if>
+      <if test="img2 != null" >
+        #{img2,jdbcType=VARCHAR},
+      </if>
+      <if test="logo != null" >
+        #{logo,jdbcType=VARCHAR},
+      </if>
+      <if test="date != null" >
+        #{date,jdbcType=DATE},
+      </if>
+      <if test="origin != null" >
+        #{origin,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.dingyan.xgjzx.pojo.Consult" >
+    update t_consult
+    set ct_title = #{title,jdbcType=VARCHAR},
+    	ct_type  = #{type,jdbcType=VARCHAR}, 
+      ct_content = #{content,jdbcType=VARCHAR},
+      ct_author = #{author,jdbcType=VARCHAR},
+      ct_img1 = #{img1,jdbcType=VARCHAR},
+      ct_img2 = #{img2,jdbcType=VARCHAR},
+      ct_logo = #{logo,jdbcType=VARCHAR},
+      ct_date = #{date,jdbcType=DATE},
+      ct_origin = #{origin,jdbcType=VARCHAR}
+    where ct_id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

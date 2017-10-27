@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dingyan.xgjzx.dao.CustomerDao" >
+  <resultMap id="CustomerMap" type="com.dingyan.xgjzx.pojo.Customer" >
+    <id column="tc_id" property="id" jdbcType="INTEGER" />
+    <result column="tc_company" property="company" jdbcType="VARCHAR" />
+    <result column="tc_name" property="name" jdbcType="VARCHAR" />
+    <result column="tc_city" property="city" jdbcType="VARCHAR" />
+    <result column="tc_status" property="status" jdbcType="BIT" />
+    <result column="tc_phone" property="phone" jdbcType="VARCHAR" />
+    <result column="tc_date" property="date" jdbcType="DATE" />
+  </resultMap>
+  <select id="findbyid" parameterType="java.lang.Integer" resultMap="CustomerMap">
+  select * from t_customer where tc_id=#{id,jdbcType=INTEGER}
+  </select>
+  <!-- 查询未读信息条数 -->
+  <select id="countnum" resultType="java.lang.Integer">
+  select count(*) from t_customer where tc_status=0
+  </select>
+  <!-- 查询所有信息条数 -->
+  <select id="count" resultType="java.lang.Integer">
+  select count(*) from t_customer
+  </select>
+  <!-- 查询所有 -->
+  <select id="selectAll" parameterType="java.lang.Integer" resultMap="CustomerMap">
+ select * from t_customer order by tc_id desc limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+  <!-- 已读消息 -->
+  <select id="selectold" parameterType="java.lang.Integer" resultMap="CustomerMap">
+ select * from t_customer where tc_status=1 order by tc_id desc limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER} 
+  </select>
+  <!-- 未读消息 -->
+  <select id="selectnew" parameterType="java.lang.Integer" resultMap="CustomerMap">
+ select * from t_customer where tc_status=0 order by tc_id desc limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER} 
+  </select>
+  <sql id="Base_Column_List" >
+    tc_id, tc_company, tc_name, tc_city, tc_status,tc_phone
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="CustomerMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_customer
+    where tc_id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_customer
+    where tc_id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.dingyan.xgjzx.pojo.Customer" >
+    insert into t_customer (tc_id, tc_company, tc_name, 
+      tc_city, tc_status,tc_phone,tc_date)
+    values (#{id,jdbcType=INTEGER}, #{company,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{city,jdbcType=VARCHAR}, #{status,jdbcType=BIT},#{phone,jdbcType=VARCHAR},#{date,jdbcType=DATE})
+  </insert>
+  <insert id="insertSelective" parameterType="com.dingyan.xgjzx.pojo.Customer" >
+    insert into t_customer
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        tc_id,
+      </if>
+      <if test="company != null" >
+        tc_company,
+      </if>
+      <if test="name != null" >
+        tc_name,
+      </if>
+      <if test="city != null" >
+        tc_city,
+      </if>
+      <if test="status != null" >
+        tc_status,
+      </if>
+       <if test="phone != null" >
+        tc_phone,
+      </if>
+      <if test="date != null" >
+        tc_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="company != null" >
+        #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=BIT},
+      </if>
+       <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+       <if test="date != null" >
+        #{date,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.dingyan.xgjzx.pojo.Customer" >
+    update t_customer
+    <set >
+      <if test="company != null" >
+        tc_company = #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        tc_name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        tc_city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        tc_status = #{status,jdbcType=BIT},
+      </if>
+      <if test="phone != null" >
+        tc_phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="date != null" >
+        tc_date = #{date,jdbcType=DATE},
+      </if>
+    </set>
+    where tc_id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.dingyan.xgjzx.pojo.Customer" >
+    update t_customer
+    set tc_company = #{company,jdbcType=VARCHAR},
+      tc_name = #{name,jdbcType=VARCHAR},
+      tc_city = #{city,jdbcType=VARCHAR},
+      tc_status = #{status,jdbcType=BIT},
+      tc_phone = #{phone,jdbcType=VARCHAR},
+      tc_date = #{date,jdbcType=VARCHAR}
+    where tc_id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

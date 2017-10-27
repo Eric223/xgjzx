@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dingyan.xgjzx.dao.NewsDao" >
+<cache/>
+  <resultMap id="NewsMap" type="com.dingyan.xgjzx.pojo.News" >
+    <id column="nt_id" property="id" jdbcType="INTEGER" />
+    <result column="nt_type" property="type" jdbcType="INTEGER" />
+    <result column="nt_title" property="title" jdbcType="VARCHAR" />
+    <result column="nt_img" property="img" jdbcType="VARCHAR" />
+    <result column="nt_imgx" property="imgx" jdbcType="VARCHAR" />
+    <result column="nt_purecontent" property="txt" jdbcType="LONGVARCHAR" />
+    <result column="nt_content" property="content" jdbcType="LONGVARCHAR" />
+    <result column="nt_date" property="date" jdbcType="DATE" />
+    <result column="nt_origin" property="origin" jdbcType="VARCHAR" />
+  </resultMap>
+  <!-- 按类型以及每页数查询信息 -->
+  <select id="selectkey" parameterType="java.lang.Integer"  resultMap="NewsMap">
+  select * from t_news where nt_type=#{type,jdbcType=INTEGER} order by nt_date desc limit 0,#{num,jdbcType=INTEGER} 
+  </select>
+  <select id="findAll" resultMap="NewsMap">
+  select * from t_news
+  </select>
+  <!-- 查询News信息条数 -->
+  <select id="count" resultType="java.lang.Integer">
+ select count(*) from t_news
+  </select>
+  <!-- 查询所有的News -->
+  <select id="selectAll" parameterType="java.lang.Integer" resultMap="NewsMap">
+  select * from t_news order by nt_id desc limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER} 
+  </select>
+  <resultMap id="ResultMapWithBLOBs" type="com.dingyan.xgjzx.pojo.News" extends="NewsMap" >
+    <result column="nt_content" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    nt_id, nt_type, nt_title, nt_img, nt_imgx, nt_date,nt_purecontent,nt_origin
+  </sql>
+  <sql id="Blob_Column_List" >
+    nt_content
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_news
+    where nt_id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_news
+    where nt_id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.dingyan.xgjzx.pojo.News" >
+    insert into t_news (nt_id, nt_type, nt_title, 
+      nt_img, nt_imgx, nt_date, 
+      nt_content,nt_purecontent,nt_origin)
+    values (#{id,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, 
+      #{img,jdbcType=VARCHAR}, #{imgx,jdbcType=VARCHAR}, #{date,jdbcType=TIMESTAMP}, 
+      #{content,jdbcType=LONGVARCHAR},#{txt,jdbcType=LONGVARCHAR},#{origin,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.dingyan.xgjzx.pojo.News" >
+    insert into t_news
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        nt_id,
+      </if>
+      <if test="type != null" >
+        nt_type,
+      </if>
+      <if test="title != null" >
+        nt_title,
+      </if>
+      <if test="img != null" >
+        nt_img,
+      </if>
+      <if test="imgx != null" >
+        nt_imgx,
+      </if>
+      <if test="date != null" >
+        nt_date,
+      </if>
+      <if test="content != null" >
+        nt_content,
+      </if>
+      <if test="txt != null" >
+        nt_purecontent,
+      </if>
+       <if test="origin != null" >
+        nt_origin,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="img != null" >
+        #{img,jdbcType=VARCHAR},
+      </if>
+      <if test="imgx != null" >
+        #{imgx,jdbcType=VARCHAR},
+      </if>
+      <if test="date != null" >
+        #{date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="txt != null" >
+        #{txt,jdbcType=VARCHAR},
+      </if>
+      <if test="origin != null" >
+        #{origin,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.dingyan.xgjzx.pojo.News" >
+    update t_news
+    <set >
+      <if test="type != null" >
+        nt_type = #{ntType,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        nt_title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="img != null" >
+        nt_img = #{img,jdbcType=VARCHAR},
+      </if>
+      <if test="imgx != null" >
+        nt_imgx = #{imgx,jdbcType=VARCHAR},
+      </if>
+      <if test="date != null" >
+        nt_date = #{date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null" >
+        nt_content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="txt != null" >
+        nt_purecontent = #{txt,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="origin != null" >
+        nt_origin = #{origin,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where nt_id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.dingyan.xgjzx.pojo.News" >
+    update t_news
+    set nt_type = #{type,jdbcType=INTEGER},
+      nt_title = #{title,jdbcType=VARCHAR},
+      nt_img = #{img,jdbcType=VARCHAR},
+      nt_imgx = #{imgx,jdbcType=VARCHAR},
+      nt_date = #{date,jdbcType=TIMESTAMP},
+      nt_content = #{content,jdbcType=LONGVARCHAR},
+      nt_purecontent = #{txt,jdbcType=LONGVARCHAR},
+      nt_origin = #{origin,jdbcType=VARCHAR}
+    where nt_id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.dingyan.xgjzx.pojo.News" >
+    update t_news
+    set nt_type = #{type,jdbcType=INTEGER},
+      nt_title = #{title,jdbcType=VARCHAR},
+      nt_img = #{img,jdbcType=VARCHAR},
+      nt_imgx = #{imgx,jdbcType=VARCHAR},
+      nt_date = #{date,jdbcType=TIMESTAMP},
+      nt_content=#{content,jdbcType=LONGVARCHAR},
+      nt_purecontent = #{txt,jdbcType=LONGVARCHAR},
+      nt_origin=#{origin,jdbcType=VARCHAR}
+    where nt_id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dingyan.xgjzx.dao.UserDao" >
+  <resultMap id="UserResultMap" type="com.dingyan.xgjzx.pojo.User" >
+    <id column="a_id" property="id" jdbcType="INTEGER" />
+    <result column="a_name" property="name" jdbcType="VARCHAR" />
+    <result column="a_password" property="password" jdbcType="VARCHAR" />
+    <result column="a_company" property="company" jdbcType="VARCHAR" />
+    <result column="a_phone" property="phone" jdbcType="VARCHAR" />
+    <result column="a_img" property="img" jdbcType="VARCHAR" />
+    <result column="a_email" property="email" jdbcType="VARCHAR" />
+    <result column="a_status" property="status" jdbcType="BIT" />
+    <result column="a_code" property="code" jdbcType="VARCHAR" />
+  </resultMap>
+  <!-- 查询数目 -->
+  <select id="count"  resultType="java.lang.Integer">
+  select count(*) from t_user
+  </select>
+  <select id="findAll" parameterType="java.lang.Integer" resultMap="UserResultMap">
+  select * from t_user order by a_id desc limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+  <!-- 登录 -->
+  <select id="login" parameterType="java.lang.String" resultMap="UserResultMap">
+  select * from t_user where a_phone=#{phone,jdbcType=VARCHAR} and a_password=#{password,jdbcType=VARCHAR}
+  or a_email=#{email,jdbcType=VARCHAR} and a_password=#{password,jdbcType=VARCHAR}
+  </select>
+  <!--按手机号查询用户-->
+  <select id="findByPhone" parameterType="java.lang.String" resultMap="UserResultMap">
+  select *from t_user where a_phone=#{phone,jdbcType=VARCHAR}
+  </select>
+  <!-- 按邮箱查询用户 -->
+  <select id="findByEmail" parameterType="java.lang.String" resultMap="UserResultMap">
+  select * from t_user where a_email=#{email,jdbcType=VARCHAR}
+  </select>
+  <sql id="Base_Column_List" >
+    a_id, a_name, a_password, a_company, a_phone, a_img, a_email, a_status,a_code
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="UserResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_user
+    where a_id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_user
+    where a_id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.dingyan.xgjzx.pojo.User" >
+    insert into t_user (a_id, a_name, a_password, 
+      a_company, a_phone, a_img, 
+      a_email, a_status,a_code)
+    values(#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{company,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{img,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{status,jdbcType=BIT},#{code,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.dingyan.xgjzx.pojo.User" >
+    insert into t_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        a_id,
+      </if>
+      <if test="name != null" >
+        a_name,
+      </if>
+      <if test="password != null" >
+        a_password,
+      </if>
+      <if test="company != null" >
+        a_company,
+      </if>
+      <if test="phone != null" >
+        a_phone,
+      </if>
+      <if test="img != null" >
+        a_img,
+      </if>
+      <if test="email != null" >
+        a_email,
+      </if>
+      <if test="status != null" >
+        a_status,
+      </if>
+      <if test="code != null" >
+        a_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="company != null" >
+        #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="img != null" >
+        #{img,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=BIT},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.dingyan.xgjzx.pojo.User" >
+    update t_user
+    <set >
+      <if test="name != null" >
+        a_name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        a_password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="company != null" >
+        a_company = #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        a_phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="img != null" >
+        a_img = #{img,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        a_email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        a_status = #{status,jdbcType=BIT},
+      </if>
+      <if test="code != null" >
+        a_code = #{code,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where a_id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.dingyan.xgjzx.pojo.User" >
+    update t_user
+    set a_name = #{name,jdbcType=VARCHAR},
+      a_password = #{password,jdbcType=VARCHAR},
+      a_company = #{company,jdbcType=VARCHAR},
+      a_phone = #{phone,jdbcType=VARCHAR},
+      a_img = #{img,jdbcType=VARCHAR},
+      a_email = #{email,jdbcType=VARCHAR},
+      a_status = #{status,jdbcType=BIT},
+      a_code = #{code,jdbcType=VARCHAR}
+   	 where a_id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

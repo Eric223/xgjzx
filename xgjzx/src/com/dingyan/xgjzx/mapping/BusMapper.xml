@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dingyan.xgjzx.dao.BusDao" >
+  <cache eviction="FIFO"   flushInterval="10800000"  size="1024" readOnly="true"  /> 
+  <resultMap id="BusMap"  type="com.dingyan.xgjzx.pojo.Bus" >
+    <id column="bus_id" property="id" jdbcType="INTEGER" />
+    <result column="bus_city" property="city" jdbcType="VARCHAR" />
+    <result column="bus_province" property="province" jdbcType="VARCHAR" />
+    <result column="img1" property="img" jdbcType="VARCHAR" />
+    <result column="bus_type_id" property="type" jdbcType="INTEGER" />
+    <result column="bus_offer" property="offer" jdbcType="VARCHAR" />
+    <result column="bus_xl" property="route" jdbcType="VARCHAR" />
+    <result column="bus_price" property="price" jdbcType="INTEGER" />
+    <result column="bus_level" property="level" jdbcType="INTEGER" />
+    <result column="bus_time" property="time" jdbcType="INTEGER" />
+  </resultMap>
+  <!-- 按条件分页搜索bus -->
+  <select id="search" parameterType="java.util.Map" resultMap="BusMap">
+  select * from t_bus_detail t where 1=1
+  <if test="bus.city!=null and bus.city!=''">
+  and t.bus_city like CONCAT('%',#{bus.city},'%')
+  </if>
+  <if test="bus.province!=null and bus.province!=''">
+  	and t.bus_province like CONCAT('%',#{bus.province},'%')
+  </if>
+  <if test="bus.route!=null and bus.route!=''">
+  	and t.bus_xl like CONCAT('%',#{bus.route},'%')
+  </if>
+   <if test="bus.level!=null and bus.level!=''">
+  	and t.bus_level like CONCAT('%',#{bus.level},'%')
+  </if>
+  <if test="bus.type!=null and bus.type!=''">
+  	and t.bus_type_id like CONCAT('%',#{bus.type},'%')
+  </if>
+  <if test="bus.time!=null and bus.time!=''">
+  	and t.bus_time like CONCAT('%',#{bus.time},'%')
+  </if>
+		limit #{page.start,jdbcType=INTEGER},#{page.size,jdbcType=INTEGER}
+  </select>
+  <!-- 搜索结果的总数量 -->
+  <select id="countSearch" parameterType="com.dingyan.xgjzx.pojo.Bus" resultType="java.lang.Integer">
+  select count(*) from t_bus_detail t where 1=1
+  <if test="city!=null and city!=''">
+  and t.bus_city like CONCAT('%',#{city},'%')
+  </if>
+  <if test="province!=null and province!=''">
+  	and t.bus_province like CONCAT('%',#{province},'%')
+  </if>
+  <if test="route!=null and route!=''">
+  	and t.bus_xl like CONCAT('%',#{route},'%')
+  </if>
+   <if test="level!=null and level!=''">
+  	and t.bus_level like CONCAT('%',#{level},'%')
+  </if>
+  </select>
+  <!-- 检查是否添加重复公交车 -->
+  <select id="check" parameterType="com.dingyan.xgjzx.pojo.Bus" resultMap="BusMap">
+  select * from t_bus_detail t where 
+   <if test="city!=null and city!=''">
+   t.bus_city like CONCAT('%',#{city},'%')
+  </if>
+  <if test="province!=null and province!=''">
+  	and t.bus_province like CONCAT('%',#{province},'%')
+  </if>
+  <if test="route!=null and route!=''">
+  	and t.bus_xl like CONCAT ('%',#{route},'%')
+  </if>
+  <if test="type!=null and type!=''">
+  	and t.bus_type_id =#{type,jdbcType=INTEGER}
+  </if>
+   <if test="time!=null and time!=''">
+  	and t.bus_time =#{time,jdbcType=INTEGER}
+  </if>
+   <if test="level!=null and level!=''">
+  	and t.bus_level =#{level,jdbcType=INTEGER}
+  </if>
+  </select>
+  <!-- 查询单个公交车价格表 -->
+  <select id="findSingle" parameterType="com.dingyan.xgjzx.pojo.Bus" resultType="java.lang.String">
+  select t.bus_price from t_bus_detail t where t.bus_time =#{time,jdbcType=INTEGER} and t.bus_type_id =#{type,jdbcType=INTEGER}
+  <if test="city!=null and city!=''">
+  and t.bus_city like CONCAT('%',#{city},'%')
+  </if>
+  <if test="province!=null and province!=''">
+  	and t.bus_province like CONCAT('%',#{province},'%')
+  </if>
+  <if test="route!=null and route!=''">
+  	and t.bus_xl like CONCAT('%',#{route},'%')
+  </if>
+   <if test="level!=null and level!=''">
+  	and t.bus_level like CONCAT('%',#{level},'%')
+  </if>
+  </select>
+  <!-- 查询bus信息条数 -->
+  <select id="countnum" resultType="java.lang.Integer">
+ select count(*) from t_bus_detail
+  </select>
+  <!-- 查询所有的bus -->
+  <select id="findAllBus" parameterType="java.lang.Integer" resultMap="BusMap">
+  select * from t_bus_detail order by bus_id desc limit #{start,jdbcType=INTEGER},#{size,jdbcType=INTEGER} 
+  </select>
+  <sql id="Base_Column_List" >
+    bus_id, bus_city, bus_province, img1, bus_type_id, bus_offer, bus_xl, bus_price, 
+    bus_level, bus_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BusMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_bus_detail
+    where bus_id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_bus_detail
+    where bus_id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.dingyan.xgjzx.pojo.Bus" >
+    insert into t_bus_detail (bus_id,bus_city, bus_province, 
+      img1, bus_type_id, bus_offer, 
+      bus_xl, bus_price, bus_level, 
+      bus_time)
+    values (#{id,jdbcType=INTEGER}, #{city,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, 
+      #{img,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{offer,jdbcType=VARCHAR}, 
+      #{route,jdbcType=VARCHAR}, #{price,jdbcType=INTEGER}, #{level,jdbcType=INTEGER}, 
+      #{time,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.dingyan.xgjzx.pojo.Bus" >
+    insert into t_bus_detail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        bus_id,
+      </if>
+      <if test="city != null" >
+        bus_city,
+      </if>
+      <if test="province != null" >
+        bus_province,
+      </if>
+      <if test="img != null" >
+        img1,
+      </if>
+      <if test="type != null" >
+        bus_type_id,
+      </if>
+      <if test="offer != null" >
+        bus_offer,
+      </if>
+      <if test="route != null" >
+        bus_xl,
+      </if>
+      <if test="price != null" >
+        bus_price,
+      </if>
+      <if test="level != null" >
+        bus_level,
+      </if>
+      <if test="time != null" >
+        bus_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="img != null" >
+        #{img,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="offer != null" >
+        #{offer,jdbcType=VARCHAR},
+      </if>
+      <if test="route != null" >
+        #{route,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=INTEGER},
+      </if>
+      <if test="level != null" >
+        #{level,jdbcType=INTEGER},
+      </if>
+      <if test="time != null" >
+        #{time,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.dingyan.xgjzx.pojo.Bus" >
+    update t_bus_detail
+    <set >
+      <if test="city != null" >
+        bus_city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        bus_province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="img != null" >
+        img1 = #{img,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        bus_type_id = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="offer != null" >
+        bus_offer = #{offer,jdbcType=VARCHAR},
+      </if>
+      <if test="route != null" >
+        bus_xl = #{route,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        bus_price = #{price,jdbcType=INTEGER},
+      </if>
+      <if test="level != null" >
+        bus_level = #{level,jdbcType=INTEGER},
+      </if>
+      <if test="time != null" >
+        bus_time = #{time,jdbcType=INTEGER},
+      </if>
+    </set>
+    where bus_id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.dingyan.xgjzx.pojo.Bus" >
+    update t_bus_detail
+    set bus_city = #{city,jdbcType=VARCHAR},
+      bus_province = #{province,jdbcType=VARCHAR},
+      img1 = #{img,jdbcType=VARCHAR},
+      bus_type_id = #{type,jdbcType=INTEGER},
+      bus_offer = #{offer,jdbcType=VARCHAR},
+      bus_xl = #{route,jdbcType=VARCHAR},
+      bus_price = #{price,jdbcType=INTEGER},
+      bus_level = #{level,jdbcType=INTEGER},
+      bus_time = #{time,jdbcType=INTEGER}
+    where bus_id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

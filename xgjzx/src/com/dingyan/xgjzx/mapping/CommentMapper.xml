@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dingyan.xgjzx.dao.CommentDao" >
+  <resultMap id="CommentMap" type="com.dingyan.xgjzx.pojo.Comment" >
+    <id column="tic_id" property="id" jdbcType="INTEGER" />
+    <result column="tic_ideaid" property="ideaid" jdbcType="INTEGER" />
+    <result column="tic_content" property="content" jdbcType="VARCHAR" />
+    <result column="tic_user" property="user" jdbcType="VARCHAR" />
+    <result column="tic_date" property="date" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    tic_id, tic_ideaid, tic_content, tic_user, tic_date
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="CommentMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_comment
+    where tic_id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_comment
+    where tic_id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.dingyan.xgjzx.pojo.Comment" >
+    insert into t_comment (tic_id, tic_ideaid, tic_content, 
+      tic_user, tic_date)
+    values (#{id,jdbcType=INTEGER}, #{ideaid,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, 
+      #{user,jdbcType=VARCHAR}, #{date,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.dingyan.xgjzx.pojo.Comment" >
+    insert into t_comment
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        tic_id,
+      </if>
+      <if test="ideaid != null" >
+        tic_ideaid,
+      </if>
+      <if test="content != null" >
+        tic_content,
+      </if>
+      <if test="user != null" >
+        tic_user,
+      </if>
+      <if test="date != null" >
+        tic_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="ideaid != null" >
+        #{ideaid,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="user != null" >
+        #{user,jdbcType=VARCHAR},
+      </if>
+      <if test="date != null" >
+        #{date,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.dingyan.xgjzx.pojo.Comment" >
+    update t_comment
+    <set >
+      <if test="ideaid != null" >
+        tic_ideaid = #{ideaid,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        tic_content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="user != null" >
+        tic_user = #{user,jdbcType=VARCHAR},
+      </if>
+      <if test="date != null" >
+        tic_date = #{date,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where tic_id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.dingyan.xgjzx.pojo.Comment" >
+    update t_comment
+    set tic_ideaid = #{ideaid,jdbcType=INTEGER},
+      tic_content = #{content,jdbcType=VARCHAR},
+      tic_user = #{user,jdbcType=VARCHAR},
+      tic_date = #{date,jdbcType=TIMESTAMP}
+    where tic_id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

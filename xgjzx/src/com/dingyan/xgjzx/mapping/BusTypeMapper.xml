@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dingyan.xgjzx.dao.TypeDao" >
+	<cache/>
+  <resultMap id="BaseResultMap" type="com.dingyan.xgjzx.pojo.BusType" >
+    <id column="ty_id" property="tyId" jdbcType="INTEGER" />
+    <result column="type_name" property="typeName" jdbcType="VARCHAR"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ty_id, type_name
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_type
+    where ty_id = #{tyId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_type
+    where ty_id = #{tyId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.dingyan.xgjzx.pojo.BusType" >
+    insert into t_type (ty_id, type_name)
+    values (#{tyId,jdbcType=INTEGER}, #{typeName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.dingyan.xgjzx.pojo.BusType" >
+    insert into t_type
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="tyId != null" >
+        ty_id,
+      </if>
+      <if test="typeName != null" >
+        type_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="tyId != null" >
+        #{tyId,jdbcType=INTEGER},
+      </if>
+      <if test="typeName != null" >
+        #{typeName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.dingyan.xgjzx.pojo.BusType" >
+    update t_type
+    <set >
+      <if test="typeName != null" >
+        type_name = #{typeName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ty_id = #{tyId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.dingyan.xgjzx.pojo.BusType" >
+    update t_type
+    set type_name = #{typeName,jdbcType=VARCHAR}
+    where ty_id = #{tyId,jdbcType=INTEGER}
+  </update>
+</mapper>

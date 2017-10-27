@@ -1,0 +1,75 @@
+{
+  "maxPage": 5,
+  "consults":[
+    {
+      "id": 1,
+      "title": "标题",
+      "type": "类型",
+      "date": "日期",
+      "content": "123456"
+    },
+    {
+      "id": 2,
+      "title": "标题",
+      "type": "类型",
+      "date": "日期",
+      "content": "123456"
+    },
+    {
+      "id": 3,
+      "title": "标题",
+      "type": "类型",
+      "date": "日期",
+      "content": "123456"
+    },
+    {
+      "id": 4,
+      "title": "标题",
+      "type": "类型",
+      "date": "日期",
+      "content": "123456"
+    },
+    {
+      "id": 5,
+      "title": "标题",
+      "type": "类型",
+      "date": "日期",
+      "content": "123456"
+    },
+    {
+      "id": 6,
+      "title": "标题",
+      "type": "类型",
+      "date": "日期",
+      "content": "123456"
+    },
+    {
+      "id": 7,
+      "title": "标题",
+      "type": "类型",
+      "date": "日期",
+      "content": "123456"
+    },
+    {
+      "id": 8,
+      "title": "标题",
+      "type": "类型",
+      "date": "日期",
+      "content": "123456"
+    },
+    {
+      "id": 9,
+      "title": "标题",
+      "type": "类型",
+      "date": "日期",
+      "content": "123456"
+    },
+    {
+      "id": 10,
+      "title": "标题",
+      "type": "类型",
+      "date": "日期",
+      "content": "123456"
+    }
+  ]
+}

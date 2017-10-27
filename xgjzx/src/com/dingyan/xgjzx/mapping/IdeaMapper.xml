@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dingyan.xgjzx.dao.IdeaDao" >
+  <resultMap id="IdeaMap" type="com.dingyan.xgjzx.pojo.Idea" >
+    <id column="ti_id" property="id" jdbcType="INTEGER" />
+    <result column="ti_content" property="icontent" jdbcType="LONGVARCHAR" />
+    <result column="ti_title" property="title" jdbcType="VARCHAR" />
+    <result column="ti_img" property="img" jdbcType="VARCHAR" />
+    <result column="ti_imgx" property="imgx" jdbcType="VARCHAR" />
+    <result column="ti_commentid" property="commentid" jdbcType="INTEGER" />
+    <result column="ti_date" property="date" jdbcType="DATE" />
+    <collection property="listcomment" ofType="com.dingyan.xgjzx.pojo.Comment" column="tic_ideaid">
+   		<id property="id" column="tic_id" jdbcType="INTEGER"/>
+   		<result column="tic_ideaid" property="ideaid" jdbcType="INTEGER" />
+   		<result column="tic_content" property="content" jdbcType="VARCHAR" />
+	    <result column="tic_user" property="user" jdbcType="VARCHAR"/>
+	    <result column="tic_date" property="date" jdbcType="TIMESTAMP"/>
+   	</collection>
+  </resultMap>
+  <select id="findAll" resultMap="IdeaMap">
+  select * from t_idea
+  </select>
+  <!-- 首页限量查询 -->
+  <select id="IndexIdeaShow" parameterType="java.lang.Integer" resultMap="IdeaMap">
+  select *from t_idea order by ti_id desc limit 0,#{num,jdbcType=INTEGER}
+  </select>
+  <!-- 关联查询 -->
+ <select id="IdeaComment" parameterType="java.lang.Integer"  resultMap="IdeaMap">
+ select i.*,c.* from t_idea i,t_comment c where i.ti_id=c.tic_ideaid and i.ti_id=#{ididea,jdbcType=INTEGER} limit 0,5
+ </select>
+ <!-- 首页分页查询 -->
+  <!-- 查询记录条数 -->
+  <select id="count" resultType="java.lang.Integer">
+  select count(*) from t_idea
+  </select>
+  <resultMap id="ResultMapWithBLOBs" type="com.dingyan.xgjzx.pojo.Idea" extends="IdeaMap" >
+    <result column="ti_content" property="icontent" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ti_id, ti_title,ti_content,ti_img,ti_imgx, ti_commentid, ti_date
+  </sql>
+  <sql id="Blob_Column_List">
+    ti_content
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_idea
+    where ti_id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_idea
+    where ti_id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.dingyan.xgjzx.pojo.Idea" >
+    insert into t_idea (ti_id, ti_title, ti_img, 
+      ti_imgx, ti_commentid, ti_date, 
+      ti_content)
+    values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{img,jdbcType=VARCHAR}, 
+      #{imgx,jdbcType=VARCHAR}, #{commentid,jdbcType=INTEGER}, #{date,jdbcType=DATE}, 
+      #{icontent,jdbcType=LONGVARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.dingyan.xgjzx.pojo.Idea" >
+    update t_idea
+    set ti_title = #{title,jdbcType=VARCHAR},
+      ti_img = #{img,jdbcType=VARCHAR},
+      ti_imgx = #{imgx,jdbcType=VARCHAR},
+      ti_commentid = #{commentid,jdbcType=INTEGER},
+      ti_content = #{icontent,jdbcType=LONGVARCHAR},
+      ti_date = #{date,jdbcType=DATE}
+    where ti_id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

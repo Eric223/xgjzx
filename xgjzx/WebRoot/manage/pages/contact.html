@@ -1,0 +1,47 @@
+<!--刊例价表-->
+<table class="table table-bordered table-hover text-center tab-news">
+    <thead class="row">
+    <tr>
+        <td>ID</td>
+        <td>公司</td>
+        <td>联系人</td>
+        <td>电话</td>
+        <td>城市</td>
+        <td>未读</td>
+        <td>时间</td>
+        <td>操作</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="item in list track by $index" ng-class="{'bg-blue': isContactUnread == $index}">
+        <td>
+            <b>{{item.id}}</b>
+        </td>
+        <td>
+            <b>{{item.company}}</b>
+        </td>
+        <td>
+            <b>{{item.name}}</b>
+        </td>
+        <td>
+            <b>{{item.phone}}</b>
+        </td>
+        <td>
+            <b>{{item.city}}</b>
+        </td>
+        <td>
+            <b>{{boolToStr(item.status, $index)}}</b>
+        </td>
+        <td>
+            <b>{{item.date}}</b>
+        </td>
+        <!--操作按钮-->
+        <td>
+            <button class="btn-small btn-info" ng-click="editModify($index)"><i class="icon-check"></i></button>
+            <button class="btn-small btn-info" ng-click="editDel($index)"><i class="icon-trash"></i></button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<!--分页-->
+<pagination page="page" max-page="maxPage" ng-click="pageTo()"></pagination>

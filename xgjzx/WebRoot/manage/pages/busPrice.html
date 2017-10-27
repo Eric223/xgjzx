@@ -1,0 +1,109 @@
+<!--搜索框-->
+<div class="search">
+    <fieldset>
+        <input type="text" placeholder="省" name="search" ng-model="keyword[0]"/>
+        <i class="icon-remove  icon-white" ng-show="isDelBtnShow[0]" ng-click="searchWithout(0)"></i>
+        <button type="submit" title="SEARCH" ng-click="searchKeyWord(0)">搜索省</button>
+    </fieldset>
+</div>
+<div class="search">
+    <fieldset>
+        <input type="text" placeholder="市" name="search" ng-model="keyword[1]"/>
+        <i class="icon-remove  icon-white" ng-show="isDelBtnShow[1]" ng-click="searchWithout(1)"></i>
+        <button type="submit" title="SEARCH" ng-click="searchKeyWord(1)">搜索市</button>
+    </fieldset>
+</div>
+<div class="search">
+    <fieldset>
+        <input type="text" placeholder="等级" name="search" ng-model="keyword[2]" autocomplete="off"
+               ng-focus="searchLevelFocus()" ng-blur="searchLevelBlur()"
+        />
+        <i class="icon-remove  icon-white" ng-show="isDelBtnShow[2]" ng-click="searchWithout(2)"></i>
+        <button type="submit" title="SEARCH" ng-click="searchKeyWord(2)">搜索等级</button>
+        <!--等级可选项-->
+        <ul ng-show="isShowPlaceWordList">
+            <li ng-repeat="item in ['S','A++','A+', 'A']" ng-click="searchLevelVal(item)">{{item}}</li>
+        </ul>
+    </fieldset>
+</div>
+
+<!--刊例价表-->
+<table class="table table-bordered table-hover text-center tab-busPrice">
+    <thead class="row">
+    <tr>
+        <td class="span1">ID</td>
+        <td class="span1">省</td>
+        <td class="span1">市</td>
+        <td class="span1">级别</td>
+        <td class="span1">类型</td>
+        <td class="span1">发布周期</td>
+        <td class="span4">路线</td>
+        <td class="span2">价格</td>
+        <td class="span3">操作</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="item in list track by $index" ng-class="{'info':isShowTabEdit == $index}">
+        <td>
+            <b>{{item.id}}</b>
+        </td>
+        <td>
+            <b ng-show="isShowTabEdit != $index">{{item.province}}</b>
+            <input type="text" ng-show="isShowTabEdit == $index" ng-model="editItem.province" title="省"/>
+        </td>
+        <td>
+            <b ng-show="isShowTabEdit != $index">{{item.city}}</b>
+            <input type="text" class="span2 edit-input" ng-show="isShowTabEdit == $index" ng-model="editItem.city"
+                   title="城市"/>
+        </td>
+        <td class="align-left">
+            <b ng-show="isShowTabEdit != $index">{{levelToStr(item.level)}}</b>
+            <select ng-show="isShowTabEdit == $index" ng-model="editItem.level" title="等级">
+                <option value="1">S</option>
+                <option value="2">A++</option>
+                <option value="3">A+</option>
+                <option value="4">A</option>
+                <!--                <option value="5">B</option>
+                                <option value="6">C</option>
+                                <option value="7">D</option>-->
+            </select>
+        </td>
+        <td>
+            <b ng-show="isShowTabEdit != $index">{{typeToCh(item.type)}}</b>
+            <select ng-show="isShowTabEdit == $index" ng-model="editItem.type" title="类型">
+                <option value="1">全车</option>
+                <option value="2">半车</option>
+                <option value="3">海报</option>
+            </select>
+        </td>
+        <td>
+            <b ng-show="isShowTabEdit != $index">{{item.time}}</b>
+            <select ng-show="isShowTabEdit == $index" ng-model="editItem.time" title="发布周期">
+                <option value="3">3</option>
+                <option value="6">6</option>
+                <option value="12">12</option>
+            </select>
+        </td>
+        <!--线路需要用大文本框-->
+        <td class="many-words align-left">
+            <p ng-show="isShowTabEdit != $index">{{item.route}}</p>
+            <textarea ng-show="isShowTabEdit == $index" ng-model="editItem.route"
+                      ng-change="myFilterToChComma(editItem.route)"
+                      title="路线"></textarea>
+        </td>
+        <td>
+            <b ng-show="isShowTabEdit != $index">{{item.price}}</b>
+            <input type="text" ng-show="isShowTabEdit == $index" ng-model="editItem.price" title="价格"/>
+        </td>
+        <!--操作按钮-->
+        <td>
+            <button class="btn-small btn-info" ng-click="editModify($index)"><i class="icon-edit"></i></button>
+            <button class="btn-small btn-info" ng-click="editSave($index)"><i class="icon-inbox"></i></button>
+            <button class="btn-small btn-info" ng-click="editDel($index)"><i class="icon-trash"></i></button>
+            <button class="btn-small btn-info" ng-click="editAdd($index)"><i class="icon-plus"></i></button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<!--分页-->
+<pagination page="page" max-page="maxPage" ng-click="pageTo()"></pagination>

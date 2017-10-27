@@ -1,0 +1,1 @@
+function getCase(t){var i=1;!function(){i=window.location.href.split("?")[1].split("=")[1]}(),myAjax(api.getcaseDetails,{consultid:i},function(i){t.find("strong").text(i.title),t.find("article").html(i.content),t.find("p").children(".caseTime").text(i.date),t.find("p").children(".origin").text(i.origin)})}$(function(){getCase($(".caseDetails-content"))});

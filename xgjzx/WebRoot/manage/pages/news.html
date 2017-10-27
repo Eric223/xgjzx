@@ -1,0 +1,64 @@
+<div class="case">
+    <!--左边：列表-->
+    <div class="case-left">
+        <!--表格-->
+        <table class="table table-bordered table-hover text-center tab-news">
+            <thead class="row">
+            <tr>
+                <td class="span1">ID</td>
+                <td class="span2">类别</td>
+                <td class="span3">标题</td>
+                <td class="span2">来源</td>
+                <td class="span2">日期</td>
+                <td class="span2">操作</td>
+            </tr>
+            </thead>
+            <tbody>
+            <!--表格内容-->
+            <tr ng-repeat="item in list track by $index" ng-class="{'info':isShowTabEdit == $index}">
+                <td>
+                    <b>{{item.id}}</b>
+                </td>
+                <td>
+                    <b ng-show="isShowTabEdit != $index">{{typeToCh(item.type)}}</b>
+                    <select ng-model="editItem.type" ng-show="isShowTabEdit == $index" title="type">
+                        <option value="1">资信快报</option>
+                        <option value="2">业界活动</option>
+                        <option value="3">行业动态</option>
+                        <option value="4">招标信息</option>
+                    </select>
+                </td>
+                <td>
+                    <b>{{item.title}}</b>
+                    <input type="text" ng-show="isShowTabEdit == $index" ng-model="editItem.title" title="title"/>
+                </td>
+                <td>
+                    <b>{{item.origin}}</b>
+                    <input type="text" ng-show="isShowTabEdit == $index" ng-model="editItem.origin" title="origin"/>
+                </td>
+                <td>
+                    <b>{{item.date}}</b>
+                    <input type="text" ng-show="isShowTabEdit == $index" ng-model="editItem.date" title="date"/>
+                </td>
+                <!--各个操作按钮-->
+                <td>
+                    <button class="btn-small btn-info" ng-click="editModify($index)"><i class="icon-edit"></i></button>
+                    <button class="btn-small btn-info" ng-click="editSave($index)"><i class="icon-inbox"></i></button>
+                    <button class="btn-small btn-info" ng-click="editDel($index)"><i class="icon-trash"></i></button>
+<!--                    <button class="btn-small btn-info" ng-click="editAdd($index)"><i class="icon-plus"></i></button>-->
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <!--右边：文本编辑-->
+    <div class="case-right">
+        <div class="add-img-btn">
+            <input type="file" name="file" onchange="angular.element(this).scope().uploadFile(this.files)"/>
+        </div>
+        <!--style给定宽度可以影响编辑器的最终宽度-->
+        <script type="text/plain" id="myEditor"></script>
+    </div>
+</div>
+<!--分页-->
+<pagination page="page" max-page="maxPage" ng-click="pageTo()"></pagination>
